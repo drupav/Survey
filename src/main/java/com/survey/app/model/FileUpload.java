@@ -38,7 +38,9 @@ public class FileUpload extends UserDateAudit implements Entity {
     @Temporal(TemporalType.DATE)
     private Date uploadDate;
     
-
+    @Column(name = "comments", nullable = false)
+    private String comments;
+    
     public Long getId() {
 		return id;
 	}
@@ -47,6 +49,8 @@ public class FileUpload extends UserDateAudit implements Entity {
 		this.id = id;
 	}
 	public String getFileLocation() {
+
+		
 		return fileLocation;
 	}
 
@@ -69,6 +73,14 @@ public class FileUpload extends UserDateAudit implements Entity {
 
 	public void setUploadDate(Date uploadDate) {
 		this.uploadDate = uploadDate;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 	@Override

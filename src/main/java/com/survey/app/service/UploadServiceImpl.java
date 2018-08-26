@@ -55,7 +55,7 @@ public class UploadServiceImpl implements UploadService{
 	
 
 	@Override
-	public String storeFile(MultipartFile file)  throws Exception {
+	public String storeFile(MultipartFile file,String comments)  throws Exception {
 		// Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
        //User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -73,10 +73,7 @@ public class UploadServiceImpl implements UploadService{
             if(fileName.contains("..")) {
                 throw new FileAlreadyExistsException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (!(authentication instanceof AnonymousAuthenticationToken)) {
-                String currentUserName = authentication.getName();
-            }
+            
 
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
@@ -85,7 +82,7 @@ public class UploadServiceImpl implements UploadService{
             fileUpload.setFileName(fileName);
             fileUpload.setFileLocation(targetLocation.toAbsolutePath().toString());
             fileUpload.setUploadDate(new  Date());
-            //fileUpload.setCreatedBy(user.getId());
+            fileUpload.setComments(comments);
             fileUploadRepository.save(fileUpload);
             JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
             		.addString("filelocation", fileUpload.getFileLocation())

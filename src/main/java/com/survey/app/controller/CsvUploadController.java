@@ -39,9 +39,9 @@ private UploadService uploadService;
     }
  
     @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+    public String uploadFile(@RequestParam("file") MultipartFile file,@RequestParam("comments") String comments) throws Exception {
     	
-        String fileName = uploadService.storeFile(file);
+        String fileName = uploadService.storeFile(file,comments);
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)

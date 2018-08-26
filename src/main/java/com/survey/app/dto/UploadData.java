@@ -10,12 +10,14 @@ public class UploadData {
     private Date uploadDate;
     private String uploadBy;
     private String fileLocation;
-	public UploadData(Long id, String fileName, String fileLocation, LocalDate uploadDate, String userName) {
+    private String comments;
+	public UploadData(Long id, String fileName, String fileLocation, LocalDate uploadDate, String userName, String comments) {
 		this.id = id;
 		this.fileName = fileName;
 		this.uploadDate =uploadDate.toDate();
 		this.uploadBy = userName;
 		this.fileLocation  = fileLocation;
+		this.comments = comments;
 	}
 	public Long getId() {
 		return id;
@@ -31,6 +33,13 @@ public class UploadData {
 	}
 	public Date getUploadDate() {
 		return uploadDate;
+	}
+	
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 	public void setUploadDate(Date uploadDate) {
 		this.uploadDate = uploadDate;
