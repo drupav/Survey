@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ import com.survey.app.util.FileStorageProperties;
 @EnableConfigurationProperties({
     FileStorageProperties.class
 })
-public class PollsApplication {
+public class PollsApplication  extends SpringBootServletInitializer {
 
 	@PostConstruct
 	void init() {

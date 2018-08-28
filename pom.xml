@@ -6,7 +6,7 @@
 	<groupId>com.survey</groupId>
 	<artifactId>survey</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>survey</name>
 	<description>survey App built with Spring Boot, Spring Security, MySQL and JWT</description>
@@ -104,6 +104,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>survey</finalName>
 	</build>
 
 </project>
