@@ -1,18 +1,36 @@
 package com.survey.app.controller;
 
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.suervey.app.util.AppConstants;
+import com.survey.app.dto.UserData;
+import com.survey.app.exception.AppException;
 import com.survey.app.exception.ResourceNotFoundException;
+import com.survey.app.model.Role;
+import com.survey.app.model.RoleName;
 import com.survey.app.model.User;
+import com.survey.app.payload.ApiResponse;
 import com.survey.app.payload.PagedResponse;
 import com.survey.app.payload.PollResponse;
+import com.survey.app.payload.SignUpRequest;
 import com.survey.app.payload.UserIdentityAvailability;
 import com.survey.app.payload.UserProfile;
 import com.survey.app.payload.UserSummary;
@@ -22,6 +40,7 @@ import com.survey.app.repository.VoteRepository;
 import com.survey.app.security.CurrentUser;
 import com.survey.app.security.UserPrincipal;
 import com.survey.app.service.PollService;
+import com.survey.app.service.UserService;
 
 @RestController
 @RequestMapping("/api")
@@ -38,6 +57,12 @@ public class UserController {
 
     @Autowired
     private PollService pollService;
+    
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
@@ -87,5 +112,32 @@ public class UserController {
                                                        @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
         return pollService.getPollsVotedBy(username, currentUser, page, size);
     }
+    
+    @GetMapping("/users")
+    public List<UserData> getAllUsers() {
+        return userService.getAllUsers();
+    }
+    
+    @PostMapping("/update")
+    public ResponseEntity<?> registerUser(@RequestBody UserData data) {
+    	
+    	User user = userRepository.findById(data.getId()).get();
+        if(userRepository.existsByUsername(data.getUsername()) && !data.getUsername().equalsIgnoreCase(user.getUsername()) ) {
+            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
+        if(userRepository.existsByEmail(data.getEmail()) && !data.getEmail().equalsIgnoreCase(user.getEmail())) {
+            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        // Creating user's account
+        user = new User(data.getId(),data.getName(), data.getUsername(),
+        		data.getEmail());
+
+
+        User result = userRepository.save(user);
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully"));
+    }
 }

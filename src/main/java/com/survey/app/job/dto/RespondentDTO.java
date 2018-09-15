@@ -7,15 +7,17 @@ public class RespondentDTO {
 	private Date startTime;
 	private Long duration;
     private String awcCode;
+    private String awcName;
     private Long districtId;
     private Long blockId;
-    private Long interviewerId;
+    private String interviewerName;
     private String villageName;
     private Long sampleNum;
     private String audio;
 	private String respondentName;
 	private String hscName;
 	private Long wardId;
+	private Long urCode;
 	private String address;
 	private String contactNum;
 	public Date getSubmissionDate() {
@@ -39,6 +41,20 @@ public class RespondentDTO {
 	public String getAwcCode() {
 		return awcCode;
 	}
+	
+	
+	public String getAwcName() {
+		return awcName;
+	}
+	public void setAwcName(String awcName) {
+		this.awcName = awcName;
+	}
+	public Long getUrCode() {
+		return urCode;
+	}
+	public void setUrCode(Long urCode) {
+		this.urCode = urCode;
+	}
 	public void setAwcCode(String awcCode) {
 		this.awcCode = awcCode;
 	}
@@ -56,11 +72,12 @@ public class RespondentDTO {
 	}
 	
 	
-	public Long getInterviewerId() {
-		return interviewerId;
+	
+	public String getInterviewerName() {
+		return interviewerName;
 	}
-	public void setInterviewerId(Long interviewerId) {
-		this.interviewerId = interviewerId;
+	public void setInterviewerName(String interviewerName) {
+		this.interviewerName = interviewerName;
 	}
 	public String getVillageName() {
 		return villageName;

@@ -12,16 +12,28 @@ import com.survey.app.job.dto.RespondentDTO;
 import com.survey.app.model.Awc;
 import com.survey.app.model.Block;
 import com.survey.app.model.District;
-import com.survey.app.model.Interviewer;
 import com.survey.app.model.Respondent;
+import com.survey.app.model.UrCode;
 import com.survey.app.model.Ward;
 import com.survey.app.repository.AwcRepository;
+import com.survey.app.repository.BlockRepository;
+import com.survey.app.repository.DistrictRepository;
+import com.survey.app.repository.UrCodeRepository;
 
 @Component
 public class Processor implements ItemProcessor<CSVContext,CSVContext> {
 	
 	@Autowired
 	private AwcRepository  awcRepository;
+	
+	@Autowired
+	private DistrictRepository districtRepository;
+	
+	@Autowired
+	private BlockRepository blockRepository;
+	
+	@Autowired
+	private UrCodeRepository urCodeRepository;
 
 	@Override
 	public CSVContext process(CSVContext data) throws Exception {
@@ -37,32 +49,27 @@ public class Processor implements ItemProcessor<CSVContext,CSVContext> {
 		respondent.setAddress(dto.getAddress());
 		respondent.setAudio(dto.getAudio());
 		respondent.setRespondentName(dto.getRespondentName());
-		Awc awc =awcRepository.findAwcByAwcCode(dto.getAwcCode());
-		respondent.setAwc(awc);
+		respondent.setAwcCode(dto.getAwcCode());
+		respondent.setAwcName(dto.getAwcName());
+		if(dto.getUrCode() != null){
+		UrCode urCode = urCodeRepository.findUrcodeByUrcode(dto.getUrCode());
+		respondent.setUrCode(urCode);
+		}
+		
 		if(dto.getBlockId() != null){
-		Block block = new Block();
-		block.setId(dto.getBlockId());
-		respondent.setBlock(block);
+			Block block = blockRepository.findBlockByBlockCode(dto.getBlockId());
+			respondent.setBlock(block);
 		}
 		respondent.setContactNum(dto.getContactNum());
 		if(dto.getDistrictId() != null){
-		District district = new District();
-		district.setId(dto.getDistrictId());
+		District district = districtRepository.findDistrictsByDistricCode(dto.getDistrictId());
 		respondent.setDistrict(district);
 		}
-		if(dto.getInterviewerId() != null){
-			Interviewer interviewer = new Interviewer();
-			interviewer.setId(dto.getInterviewerId());
-			respondent.setInterviewer(interviewer);
-		}
+		respondent.setInterviewer(dto.getInterviewerName());
 		respondent.setHscName(dto.getHscName());
 		respondent.setSampleNum(dto.getSampleNum());
 		respondent.setVillageName(dto.getVillageName());
-		if(dto.getWardId() != null){
-		Ward ward = new Ward();
-		ward.setId(dto.getWardId());
-		respondent.setWard(ward);
-		}
+		respondent.setWard(dto.getWardId());
 		respondent.setStartTime(dto.getStartTime());
 		respondent.setDuration(dto.getDuration());
 		return respondent;

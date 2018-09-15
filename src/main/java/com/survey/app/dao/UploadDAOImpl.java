@@ -52,7 +52,7 @@ public class UploadDAOImpl extends JpaDao<FileUpload, Long> implements UploadDAO
 	private static final class RespondentMapper implements RowMapper<UploadData> {
 
 		public String schema() {
-			return "  file.id as id,file.file_name as fileName,file.file_location as fileLocation,file.upload_date as uploadDate,"
+			return "  file.id as id,file.file_name as fileName,file.upload_type as uploadType,file.file_location as fileLocation,file.upload_date as uploadDate,"
 					+ " file.comments as comments, u.username as userName"
 					+ " from file_upload file"
 					+ " left join users u on u.id = file.created_by ";
@@ -66,11 +66,12 @@ public class UploadDAOImpl extends JpaDao<FileUpload, Long> implements UploadDAO
 			Long id = rs.getLong("id");
 			String fileName = rs.getString("fileName");
 			String fileLocation = rs.getString("fileLocation");
+			String uploadType = rs.getString("uploadType");
 			String userName = rs.getString("userName");
 			LocalDate uploadDate = JdbcSupport.getLocalDate(rs, "uploadDate");
 			String comments = rs.getString("comments");
 			
-			return new UploadData(id,fileName,fileLocation,uploadDate,userName,comments);
+			return new UploadData(id,fileName,fileLocation,uploadDate,userName,comments,uploadType);
 		}
 	}
 }

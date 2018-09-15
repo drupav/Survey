@@ -1,6 +1,9 @@
 package com.survey.app.payload;
 
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * Created by rajeevkumarsingh on 02/08/17.
@@ -23,6 +26,12 @@ public class SignUpRequest {
     @NotBlank
     @Size(min = 6, max = 20)
     private String password;
+    
+    @NotBlank
+    @Size(min = 6, max = 20)
+    private String retypepassword;
+   
+
 
     public String getName() {
         return name;
@@ -55,4 +64,14 @@ public class SignUpRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public String getRetypepassword() {
+		return retypepassword;
+	}
+
+	public void setRetypepassword(String retypepassword) {
+		this.retypepassword = retypepassword;
+	}
+
+    
 }

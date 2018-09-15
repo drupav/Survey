@@ -24,6 +24,9 @@ public class District extends UserDateAudit implements Entity{
 
     @Column(name = "district_name", nullable = false)
     private String districtName;
+    
+    @Column(name = "district_code", nullable = false)
+    private Long districtCode;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "region_id", nullable = false)
@@ -45,8 +48,14 @@ public class District extends UserDateAudit implements Entity{
 	public void setDistrictName(String districtName) {
 		this.districtName = districtName;
 	}
-	
-	
+
+	public Long getDistrictCode() {
+		return districtCode;
+	}
+
+	public void setDistrictCode(Long districtCode) {
+		this.districtCode = districtCode;
+	}
 
 	public Region getRegion() {
 		return region;

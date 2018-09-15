@@ -16,9 +16,6 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +37,9 @@ public class UploadServiceImpl implements UploadService{
 	private FileUploadRepository fileUploadRepository;
 	
 	@Autowired
+	private QualityCheckService  qualityCheckService;
+	
+	@Autowired
     JobLauncher simpleJobLauncher;
 	
 	@Autowired
@@ -55,7 +55,7 @@ public class UploadServiceImpl implements UploadService{
 	
 
 	@Override
-	public String storeFile(MultipartFile file,String comments)  throws Exception {
+	public String storeFile(MultipartFile file,String comments,String uploadType)  throws Exception {
 		// Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
        //User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -82,12 +82,18 @@ public class UploadServiceImpl implements UploadService{
             fileUpload.setFileName(fileName);
             fileUpload.setFileLocation(targetLocation.toAbsolutePath().toString());
             fileUpload.setUploadDate(new  Date());
+            fileUpload.setUploadType(uploadType);
             fileUpload.setComments(comments);
             fileUploadRepository.save(fileUpload);
+            
+            if("QUALITY_CHECK".equalsIgnoreCase(uploadType)){
+            	qualityCheckService.processQualityCheckRecord(fileUpload.getFileLocation());
+            }else{
             JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
             		.addString("filelocation", fileUpload.getFileLocation())
                     .toJobParameters();
             simpleJobLauncher.run(processJob, jobParameters);
+            }
  
            // return new ResponseEntity<Void>(HttpStatus.OK);
         } catch (IOException ex) {}

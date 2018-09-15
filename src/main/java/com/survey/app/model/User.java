@@ -47,6 +47,9 @@ public class User extends DateAudit {
     @Size(max = 100)
     private String password;
 
+    @Column(name = "is_active", columnDefinition = "BOOLEAN")
+    private Boolean isActive;
+    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -64,7 +67,18 @@ public class User extends DateAudit {
         this.password = password;
     }
 
-    public Long getId() {
+    public User(String name, String username, String email) {
+    	
+	}
+
+	public User(Long id, String name, String username, String email) {
+		this.id = id;
+		 this.name = name;
+         this.username = username;
+         this.email = email;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -111,4 +125,14 @@ public class User extends DateAudit {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+	public Boolean isActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+    
+    
 }

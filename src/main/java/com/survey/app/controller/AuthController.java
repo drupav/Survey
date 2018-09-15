@@ -66,7 +66,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,username));
     }
 
     @PostMapping("/signup")
@@ -80,6 +80,11 @@ public class AuthController {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
+        
+        if(!signUpRequest.getPassword().equalsIgnoreCase(signUpRequest.getRetypepassword())) {
+            return new ResponseEntity(new ApiResponse(false, "Re Enter password mismatch!!"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
         // Creating user's account
         User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
@@ -91,7 +96,7 @@ public class AuthController {
                 .orElseThrow(() -> new AppException("User Role not set."));
 
         user.setRoles(Collections.singleton(userRole));
-
+        user.setIsActive(true);
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder

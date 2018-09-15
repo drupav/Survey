@@ -39,12 +39,13 @@ public class RespondentData {
 	private Date startTime;
 	private Long duration;
 	private String awcCode;
+	private String urName;
    
 
 
 	public RespondentData(Long id, String regionName, String districtName,String blockName, String villageName, String interviewerName,
 			String respondentName, String audio, Long samplenum,LocalDate lastSubmission, String awcName, String hscName, String ward, 
-			String address, String contactNum, String resultStatus, DateTime startTime, Long duration, String awcCode) {
+			String address, String contactNum, String resultStatus, DateTime startTime, Long duration, String awcCode, String urName) {
 		this.id =id;
 		this.regionName =regionName;
 		this.districtName = districtName;
@@ -64,6 +65,7 @@ public class RespondentData {
 		if(lastSubmission != null)this.lastSubmission = lastSubmission.toDate();
 		if(startTime != null)this.startTime =startTime.toDate();
 		this.duration =duration;
+		this.urName = urName;
 	}
 
 
@@ -96,6 +98,18 @@ public class RespondentData {
 	public void setInterviewers(List<Interviewer> interviewers) {
 		this.interviewers = interviewers;
 	}
+
+	public String getUrName() {
+		return urName;
+	}
+
+
+
+	public void setUrName(String urName) {
+		this.urName = urName;
+	}
+
+
 
 	public void setHscName(String hscName) {
 		this.hscName = hscName;

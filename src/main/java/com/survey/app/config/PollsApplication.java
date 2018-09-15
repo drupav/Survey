@@ -40,7 +40,6 @@ public class PollsApplication  extends SpringBootServletInitializer {
 	
 	@Configuration
 	public class JacksonConfig {
-
 	    @Bean
 	    public ObjectMapper createObjectMapper() {  
 	        ObjectMapper mapper = new ObjectMapper();

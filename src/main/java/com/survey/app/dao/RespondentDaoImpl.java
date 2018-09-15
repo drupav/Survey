@@ -50,9 +50,6 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 			}if(regionId != 0){
 				sqlBuilder.append(" and region.id ="+regionId);
 			}
-			if(interviewerId != 0){
-				sqlBuilder.append(" and res.interviewer_id ="+interviewerId);
-			}
 			
 			sqlBuilder.append(" group by res.id");
 			if (pageSize != 0) {
@@ -72,17 +69,15 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 
 		public String schema() {
 			return "  res.id as id,region.region_name as regionName,dis.district_name as districtName,block.block_name as blockName," +
-				   " res.village_name as villageName,interviewer.interviewer_name as interviewerName,res.respondent_name as respondentName," +
-					" res.audio as audio,res.sample_num as samplenum,res.submission_date as lastSubmission,"
-					+ "awc.awc_code as awcCode,awc.awc_name as awcName,hsc_name as hscName,w.ward_name as ward,address as address,contact_num as contactNum,"
+				   " res.village_name as villageName,res.interviewer_name as interviewerName,res.respondent_name as respondentName," +
+					" res.audio as audio,res.sample_num as samplenum,res.submission_date as lastSubmission,ur.ur_name as urName,"
+					+ "res.awc_code as awcCode,res.awc_name as awcName,hsc_name as hscName,res.ward_id as ward,address as address,contact_num as contactNum,"
 					+ " result_status as resultStatus,res.start_time as startTime,res.duration as duration"
 					+ " from respondent res " +
-					" left join block block ON block.id = res.block_id" +
+					" left join block block ON block.id = res.block_id"
+					+ " left join ur_code ur ON ur.id = res.ur_id" +
 					" left join district dis ON dis.id = block.district_id"
-					+ " left join ward w ON w.id=res.ward_id" +
-					" left join region ON region.id = dis.region_id"
-					+ " left join awc awc ON awc.id = res.awc_id" +
-					" left join interviewer ON interviewer.id = res.interviewer_id where 1=1 ";
+					+ " left join region ON region.id = dis.region_id where 1=1 ";
 		}
 
 		@Override
@@ -103,16 +98,16 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 			String awcCode = rs.getString("awcCode");
 			String hscName = rs.getString("hscName");
 			String ward = rs.getString("ward");
+			String urName = rs.getString("urName");
 			String address = rs.getString("address");
 			String contactNum = rs.getString("contactNum");
 			String resultStatus = rs.getString("resultStatus");
 			LocalDate lastSubmission = JdbcSupport.getLocalDate(rs, "lastSubmission");
-			
 			DateTime startTime=JdbcSupport.getDateTime(rs,"startTime");
 			Long duration = rs.getLong("duration");
 			
 			return new RespondentData(id,regionName,districtName,blockName,villageName,interviewerName,respondentName,audio,samplenum,lastSubmission,
-					awcName,hscName,ward,address,contactNum,resultStatus,startTime,duration,awcCode);
+					awcName,hscName,ward,address,contactNum,resultStatus,startTime,duration,awcCode,urName);
 			
 
 		}

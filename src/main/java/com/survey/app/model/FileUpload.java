@@ -33,6 +33,9 @@ public class FileUpload extends UserDateAudit implements Entity {
     
     @Column(name = "file_location", nullable = false)
     private String fileLocation;
+    
+    @Column(name = "upload_type", nullable = false)
+    private String uploadType;
 
     @Column(name = "upload_date", nullable = true)
     @Temporal(TemporalType.DATE)
@@ -69,6 +72,14 @@ public class FileUpload extends UserDateAudit implements Entity {
 
 	public Date getUploadDate() {
 		return uploadDate;
+	}
+
+	public String getUploadType() {
+		return uploadType;
+	}
+
+	public void setUploadType(String uploadType) {
+		this.uploadType = uploadType;
 	}
 
 	public void setUploadDate(Date uploadDate) {

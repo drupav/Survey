@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.survey.app.dao.RespondentDao;
 import com.survey.app.dto.RespondentData;
 import com.survey.app.exception.MyFileNotFoundException;
-import com.survey.app.model.FileUpload;
 import com.survey.app.model.Respondent;
 import com.survey.app.repository.RespondentRepository;
 import com.survey.app.util.FileStorageProperties;

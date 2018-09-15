@@ -37,13 +37,20 @@ public class Respondent  extends UserDateAudit implements Entity {
     @JoinColumn(name = "block_id", nullable = false)
     private Block block;
     
-    @ManyToOne
-    @JoinColumn(name = "interviewer_id", nullable = false)
-    private Interviewer interviewer;
+  //  @ManyToOne
+   // @JoinColumn(name = "interviewer_id", nullable = false)
+    @Column(name = "interviewer_name", nullable = false)
+    private String interviewer;
+    
+    @Column(name = "awc_code", nullable = false)
+    private String awcCode;
+    
+    @Column(name = "awc_name", nullable = false)
+    private String awcName;
     
     @ManyToOne
-    @JoinColumn(name = "awc_id", nullable = false)
-    private Awc awc;
+    @JoinColumn(name = "ur_id", nullable = false)
+    private UrCode urCode;
 
     @Column(name = "village_name", nullable = false)
     private String villageName;
@@ -57,9 +64,8 @@ public class Respondent  extends UserDateAudit implements Entity {
     @Column(name = "hsc_name", nullable = false)
     private String hscName;
 
-    @ManyToOne
-    @JoinColumn(name = "ward_id", nullable = false)
-    private Ward ward;
+    @Column(name = "ward_id", nullable = false)
+    private Long ward;
     
     @Column(name = "address", nullable = false)
     private String address;
@@ -110,11 +116,11 @@ public class Respondent  extends UserDateAudit implements Entity {
 		this.block = block;
 	}
 
-	public Interviewer getInterviewer() {
+	public String getInterviewer() {
 		return interviewer;
 	}
 
-	public void setInterviewer(Interviewer interviewer) {
+	public void setInterviewer(String interviewer) {
 		this.interviewer = interviewer;
 	}
 	
@@ -159,12 +165,20 @@ public class Respondent  extends UserDateAudit implements Entity {
 		this.submissionDate = submissionDate;
 	}
 	
-	public Awc getAwc() {
-		return awc;
+	public String getAwcCode() {
+		return awcCode;
 	}
 
-	public void setAwc(Awc awc) {
-		this.awc = awc;
+	public void setAwcCode(String awcCode) {
+		this.awcCode = awcCode;
+	}
+
+	public String getAwcName() {
+		return awcName;
+	}
+
+	public void setAwcName(String awcName) {
+		this.awcName = awcName;
 	}
 
 	public String getHscName() {
@@ -175,11 +189,11 @@ public class Respondent  extends UserDateAudit implements Entity {
 		this.hscName = hscName;
 	}
 
-	public Ward getWard() {
+	public Long getWard() {
 		return ward;
 	}
 
-	public void setWard(Ward ward) {
+	public void setWard(Long ward) {
 		this.ward = ward;
 	}
 
@@ -236,6 +250,12 @@ public class Respondent  extends UserDateAudit implements Entity {
 		this.startTime = startTime;
 	}
     
-    
+	public UrCode getUrCode() {
+		return urCode;
+	}
+
+	public void setUrCode(UrCode urCode) {
+		this.urCode = urCode;
+	}
 
 }

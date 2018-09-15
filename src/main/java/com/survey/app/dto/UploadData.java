@@ -9,15 +9,17 @@ public class UploadData {
     private String fileName;
     private Date uploadDate;
     private String uploadBy;
-    private String fileLocation;
+    private String fileLocation; 
+    private String uploadType;
     private String comments;
-	public UploadData(Long id, String fileName, String fileLocation, LocalDate uploadDate, String userName, String comments) {
+	public UploadData(Long id, String fileName, String fileLocation, LocalDate uploadDate, String userName, String comments,String  uploadType) {
 		this.id = id;
 		this.fileName = fileName;
 		this.uploadDate =uploadDate.toDate();
 		this.uploadBy = userName;
 		this.fileLocation  = fileLocation;
 		this.comments = comments;
+		this.uploadType = uploadType;
 	}
 	public Long getId() {
 		return id;
@@ -35,6 +37,12 @@ public class UploadData {
 		return uploadDate;
 	}
 	
+	public String getUploadType() {
+		return uploadType;
+	}
+	public void setUploadType(String uploadType) {
+		this.uploadType = uploadType;
+	}
 	public String getComments() {
 		return comments;
 	}

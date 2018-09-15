@@ -6,9 +6,11 @@ package com.survey.app.payload;
 public class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
+    private String userName;
 
-    public JwtAuthenticationResponse(String accessToken) {
+    public JwtAuthenticationResponse(String accessToken,String username) {
         this.accessToken = accessToken;
+        this.userName = username;
     }
 
     public String getAccessToken() {
@@ -26,4 +28,14 @@ public class JwtAuthenticationResponse {
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
     }
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+    
+    
 }

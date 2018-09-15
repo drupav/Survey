@@ -24,6 +24,9 @@ public class Block implements Entity{
     @Column(name = "block_name", nullable = false)
     private String blockName;
     
+    @Column(name = "block_code", nullable = false)
+    private Long blockCode;
+    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "district_id", nullable = false)
     private District district;
@@ -46,6 +49,14 @@ public class Block implements Entity{
 	}
 
 	
+	public Long getBlockCode() {
+		return blockCode;
+	}
+
+	public void setBlockCode(Long blockCode) {
+		this.blockCode = blockCode;
+	}
+
 	public District getDistrict() {
 		return district;
 	}

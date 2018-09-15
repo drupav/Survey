@@ -9,7 +9,7 @@ import com.survey.app.util.Page;
 
 public interface UploadService {
 	
-String storeFile(MultipartFile file, String comments) throws Exception;
+String storeFile(MultipartFile file, String comments, String uploadType) throws Exception;
 
 Page<UploadData> getAllUploads(Long page, Long size);
 
