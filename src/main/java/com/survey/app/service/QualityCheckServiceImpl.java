@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
@@ -27,8 +28,8 @@ import com.survey.app.util.Page;
 
 @Service
 public class QualityCheckServiceImpl implements QualityCheckService{
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy HH:mm");
-	 private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss a");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm",Locale.ENGLISH);
+	private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss a",Locale.ENGLISH);
 	 
 	@Autowired
 	private QualityCheckRepository qualityCheckRepository;
@@ -87,16 +88,16 @@ public class QualityCheckServiceImpl implements QualityCheckService{
 		qualityCheck.setAwcName(record.get("Identification3_3"));
 		if(StringUtils.isNotEmpty(record.get("block"))){
 				Block block = blockRepository.findBlockByBlockCode(Long.valueOf(record.get("block")));
-		qualityCheck.setBlock(block);
+		if(block != null)qualityCheck.setBlock(block);
 		}
 		if(StringUtils.isNotEmpty(record.get("district"))){
 			District district = districtRepository.findDistrictsByDistricCode(Long.valueOf(record.get("district")));
-			qualityCheck.setDistrict(district);
+			if(district != null)qualityCheck.setDistrict(district);
 		}
 		
 		if(StringUtils.isNotEmpty(record.get("UR"))){
 			UrCode urCode = urCodeRepository.findUrcodeByUrcode(Long.valueOf(record.get("UR")));
-			qualityCheck.setUrCode(urCode);
+			if(urCode != null)qualityCheck.setUrCode(urCode);
 		}
 		return qualityCheck;
 	

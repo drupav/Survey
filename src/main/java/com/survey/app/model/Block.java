@@ -30,6 +30,9 @@ public class Block implements Entity{
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "district_id", nullable = false)
     private District district;
+    
+    @Column(name = "total_samples", nullable = false)
+    private Long totalSamples;
 
 
     public Long getId() {
@@ -63,6 +66,14 @@ public class Block implements Entity{
 
 	public void setDistrict(District district) {
 		this.district = district;
+	}
+
+	public Long getTotalSamples() {
+		return totalSamples;
+	}
+
+	public void setTotalSamples(Long totalSamples) {
+		this.totalSamples = totalSamples;
 	}
 
 	@Override

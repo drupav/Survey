@@ -27,6 +27,9 @@ public class District extends UserDateAudit implements Entity{
     
     @Column(name = "district_code", nullable = false)
     private Long districtCode;
+    
+    @Column(name = "total_samples", nullable = false)
+    private Long totalSamples;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "region_id", nullable = false)
@@ -63,6 +66,14 @@ public class District extends UserDateAudit implements Entity{
 
 	public void setRegion(Region region) {
 		this.region = region;
+	}
+
+	public Long getTotalSamples() {
+		return totalSamples;
+	}
+
+	public void setTotalSamples(Long totalSamples) {
+		this.totalSamples = totalSamples;
 	}
 
 	@Override

@@ -58,6 +58,9 @@ public class Respondent  extends UserDateAudit implements Entity {
     @Column(name = "respondent_name", nullable = false)
     private String respondentName;
     
+    @Column(name = "serial_num", nullable = false)
+    private Long serialNum;
+    
     @Column(name = "sample_num", nullable = false)
     private Long sampleNum;
     
@@ -79,6 +82,12 @@ public class Respondent  extends UserDateAudit implements Entity {
     @Column(name = "audio", nullable = false)
     private String audio;
     
+    @Column(name = "interviewer_code", nullable = false)
+    private String interviewerCode;
+    
+    @Column(name = "household_rel", nullable = false)
+    private String householdRel;
+    
     @Column(name = "submission_date", nullable = true)
     @Temporal(TemporalType.DATE)
     private Date submissionDate;
@@ -89,6 +98,10 @@ public class Respondent  extends UserDateAudit implements Entity {
     @Column(name = "start_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
+    
+    @Column(name = "end_time", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date endTime;
    
 
 	public Long getId() {
@@ -258,4 +271,36 @@ public class Respondent  extends UserDateAudit implements Entity {
 		this.urCode = urCode;
 	}
 
+	public Long getSerialNum() {
+		return serialNum;
+	}
+
+	public void setSerialNum(Long serialNum) {
+		this.serialNum = serialNum;
+	}
+
+	public String getInterviewerCode() {
+		return interviewerCode;
+	}
+
+	public void setInterviewerCode(String interviewerCode) {
+		this.interviewerCode = interviewerCode;
+	}
+
+	public String getHouseholdRel() {
+		return householdRel;
+	}
+
+	public void setHouseholdRel(String householdRel) {
+		this.householdRel = householdRel;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	
 }

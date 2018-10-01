@@ -14,7 +14,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -27,6 +29,7 @@ import com.survey.app.util.FileStorageProperties;
 @EnableConfigurationProperties({
     FileStorageProperties.class
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PollsApplication  extends SpringBootServletInitializer {
 
 	@PostConstruct
@@ -36,6 +39,15 @@ public class PollsApplication  extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PollsApplication.class, args);
+	}
+	
+	@Bean
+	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+	    ObjectMapper mapper = new ObjectMapper();
+	    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+	    MappingJackson2HttpMessageConverter converter = 
+	        new MappingJackson2HttpMessageConverter(mapper);
+	    return converter;
 	}
 	
 	@Configuration

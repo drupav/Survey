@@ -1,6 +1,9 @@
 package com.survey.app.model;
 
 import org.hibernate.annotations.NaturalId;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.survey.app.model.audit.DateAudit;
 
@@ -8,6 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +30,7 @@ import java.util.Set;
             "email"
         })
 })
-public class User extends DateAudit {
+public class User extends DateAudit implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -86,10 +92,6 @@ public class User extends DateAudit {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -132,6 +134,61 @@ public class User extends DateAudit {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities()
+	{
+		Set<Role> roles = this.getRoles();
+
+		if (roles == null) {
+			return Collections.emptyList();
+		}
+
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		for (Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getName().toString()));
+		}
+
+		return authorities;
+	}
+
+
+	@Override
+	public String getUsername()
+	{
+		return this.username;
+	}
+
+
+
+
+
+	@Override
+	public boolean isAccountNonExpired()
+	{
+		return true;
+	}
+
+
+	@Override
+	public boolean isAccountNonLocked()
+	{
+		return true;
+	}
+
+
+	@Override
+	public boolean isCredentialsNonExpired()
+	{
+		return true;
+	}
+
+
+	@Override
+	public boolean isEnabled()
+	{
+		return true;
 	}
     
     

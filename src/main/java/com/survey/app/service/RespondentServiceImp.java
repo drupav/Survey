@@ -3,8 +3,12 @@ package com.survey.app.service;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +17,14 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
 import com.survey.app.dao.RespondentDao;
+import com.survey.app.dto.AllSubmissionMetaData;
+import com.survey.app.dto.InterviewerData;
 import com.survey.app.dto.RespondentData;
+import com.survey.app.dto.TreeViewData;
 import com.survey.app.exception.MyFileNotFoundException;
+import com.survey.app.model.District;
 import com.survey.app.model.Respondent;
+import com.survey.app.repository.DistrictRepository;
 import com.survey.app.repository.RespondentRepository;
 import com.survey.app.util.FileStorageProperties;
 import com.survey.app.util.FileUtils;
@@ -31,12 +40,16 @@ public class RespondentServiceImp implements RespondentService{
 	
 	@Autowired
 	private RespondentRepository respondentRepository;
+	
+	@Autowired
+	private DistrictRepository districtRepository;
 
 	@Autowired
     Job processJob;
 	
 	@Autowired
     JobLauncher simpleJobLauncher;
+	
 	
 	
 	@Autowired
@@ -67,6 +80,41 @@ public class RespondentServiceImp implements RespondentService{
 	        	
 	        }
 	        return null;
+	}
+
+	@Override
+	public TreeViewData getMetaData(Long page, Long size,Long blockId, Long districtId) {
+		TreeViewData treeViewData = respondentDao.getMetaData(page, size,blockId,districtId);
+		 AtomicInteger atomicInteger = new AtomicInteger(200);
+		treeViewData.getItems().forEach(item ->{
+			if(item.getDistrictId() != null)
+			item.setId(Long.valueOf(atomicInteger.getAndIncrement()));
+		});
+		if(districtId != 0){
+		District district = districtRepository.findById(districtId).get();
+			List<AllSubmissionMetaData> list =	treeViewData.getItems().stream().
+					filter( item -> 
+					(item.getDistrictId() != null && item.getDistrictId() == districtId) || 
+					(item.getDistrictId() == null && StringUtils.isNotEmpty(item.getDistrictName())
+					&& district.getDistrictName().equalsIgnoreCase(item.getDistrictName()))).collect(Collectors.toList());
+			treeViewData.setItems(list);
+		}
+		Long completed=treeViewData.getItems().stream().filter(item -> item.getDistrictId() == null).mapToLong(AllSubmissionMetaData::getCompletedSamples).sum();
+		treeViewData.setTotalFilteredRecords(completed);
+		treeViewData.setPendingSamples(treeViewData.getTotalSamples() - completed);
+		return treeViewData;
+	}
+
+	@Override
+	public Page<InterviewerData> getInterviewerData(Long blockId, Long districtId, String searchString, Long page,
+			Long size) {
+		return respondentDao.getInterviewerData(blockId, districtId, searchString, page, size);
+	}
+
+	@Override
+	public Page<InterviewerData> getinterviewierQualitycheckData(Long blockId, Long districtId, String searchString,
+			Long page, Long size) {
+		return respondentDao.getinterviewierQualitycheckData(blockId, districtId, searchString, page, size);
 	}
 
 	

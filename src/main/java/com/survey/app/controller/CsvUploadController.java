@@ -32,8 +32,8 @@ public class CsvUploadController {
 private UploadService uploadService;
 
  @GetMapping
- public Page<UploadData> getPolls(@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
-         @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size ) {
+ public Page<UploadData> getPolls(@RequestParam(value = "offset", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
+         @RequestParam(value = "limit", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size ) {
     	
         return uploadService.getAllUploads(page, size);
     }

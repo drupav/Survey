@@ -13,15 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.suervey.app.util.AppConstants;
+import com.survey.app.dto.AllSubmissionMetaData;
+import com.survey.app.dto.InterviewerData;
 import com.survey.app.dto.RespondentData;
+import com.survey.app.dto.TreeViewData;
 import com.survey.app.model.Block;
 import com.survey.app.model.District;
 import com.survey.app.model.Interviewer;
@@ -48,8 +48,8 @@ private SurveyCommonService surveyCommonService;
             									@RequestParam(value = "regionId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long regionId,
             									@RequestParam(value = "searchString", defaultValue = StringUtils.EMPTY) String searchString,
             									@RequestParam(value = "interviewerId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long interviewerId,
-                                                @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
-                                                @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size) {
+                                                @RequestParam(value = "offset", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
+                                                @RequestParam(value = "limit", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size) {
     	
         return respondentService.getAllRespondents(blockId, districtId, regionId,interviewerId, searchString, page, size);
     }
@@ -66,6 +66,34 @@ private SurveyCommonService surveyCommonService;
 		return new RespondentData(regions,districts,blocks,interviewers);
     	
 	}
+    @GetMapping("/getMetData")
+    public TreeViewData getMetaData(@RequestParam(value = "offset", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
+                                                   @RequestParam(value = "limit", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size,
+                                                   @RequestParam(value = "blockId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long blockId,
+               									@RequestParam(value = "districtId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long districtId) {
+       	
+           return respondentService.getMetaData(page, size,blockId,districtId);
+       }
+    
+    @GetMapping("/getinterviewierData")
+    public Page<InterviewerData> getInterviewerData(@RequestParam(value = "offset", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
+                                                   @RequestParam(value = "limit", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size,
+                                                   @RequestParam(value = "searchString", defaultValue = StringUtils.EMPTY) String searchString,
+                                                   @RequestParam(value = "blockId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long blockId,
+               									@RequestParam(value = "districtId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long districtId) {
+       	
+           return respondentService.getInterviewerData(blockId, districtId, searchString, page, size);
+    }
+    
+    @GetMapping("/getinterviewierQualitycheck")
+    public Page<InterviewerData> getinterviewierQualitycheck(@RequestParam(value = "offset", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
+                                                   @RequestParam(value = "limit", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size,
+                                                   @RequestParam(value = "searchString", defaultValue = StringUtils.EMPTY) String searchString,
+                                                   @RequestParam(value = "blockId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long blockId,
+               									@RequestParam(value = "districtId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long districtId) {
+       	
+           return respondentService.getinterviewierQualitycheckData(blockId, districtId, searchString, page, size);
+    }
     
     @GetMapping("/downloadaudiofile/{respondentId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long respondentId, HttpServletRequest request) {

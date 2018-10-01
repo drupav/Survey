@@ -22,6 +22,7 @@ public class RespondentData {
     private String villageName;
     private Long sampleNum;
     private String audio;
+    private String householdRel;
 	private String respondentName;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -107,6 +108,18 @@ public class RespondentData {
 
 	public void setUrName(String urName) {
 		this.urName = urName;
+	}
+
+
+
+	public String getHouseholdRel() {
+		return householdRel;
+	}
+
+
+
+	public void setHouseholdRel(String householdRel) {
+		this.householdRel = householdRel;
 	}
 
 

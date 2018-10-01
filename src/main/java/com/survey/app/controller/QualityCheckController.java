@@ -25,8 +25,8 @@ private QualityCheckService qualityCheckService;
  public Page<QualityCheckData> getAllData( @RequestParam(value = "blockId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long blockId,
             									@RequestParam(value = "districtId", defaultValue = AppConstants.DEFAULT_LONG_VALUE) Long districtId,
             									@RequestParam(value = "searchString", defaultValue = StringUtils.EMPTY) String searchString,
-                                                @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
-                                                @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size) {
+                                                @RequestParam(value = "offset", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Long page,
+                                                @RequestParam(value = "limit", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Long size) {
     	
         return qualityCheckService.getAllQualityChecks(blockId, districtId, searchString, page, size);
     }

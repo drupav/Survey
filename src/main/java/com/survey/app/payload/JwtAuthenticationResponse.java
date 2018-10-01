@@ -7,10 +7,12 @@ public class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
     private String userName;
+    private String userType;
 
-    public JwtAuthenticationResponse(String accessToken,String username) {
+    public JwtAuthenticationResponse(String accessToken,String username, String userType) {
         this.accessToken = accessToken;
         this.userName = username;
+        this.userType = userType;
     }
 
     public String getAccessToken() {
@@ -36,6 +38,13 @@ public class JwtAuthenticationResponse {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-    
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
     
 }

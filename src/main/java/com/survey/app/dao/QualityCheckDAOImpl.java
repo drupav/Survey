@@ -2,6 +2,7 @@ package com.survey.app.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -14,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.survey.app.dto.RespondentData;
 import com.survey.app.job.dto.QualityCheckData;
+import com.survey.app.model.District;
 import com.survey.app.model.QualityCheck;
 import com.survey.app.model.Respondent;
+import com.survey.app.repository.DistrictRepository;
 import com.survey.app.util.JdbcSupport;
 import com.survey.app.util.Page;
 import com.survey.app.util.PaginationHelper;
@@ -25,6 +28,10 @@ public class QualityCheckDAOImpl extends JpaDao<QualityCheck, Long> implements Q
 	
 	@Autowired
     private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private DistrictRepository districtRepository;
+	
 	private final PaginationHelper<QualityCheckData> paginationHelper = new PaginationHelper<QualityCheckData>();
 	public QualityCheckDAOImpl() {
 		super(QualityCheck.class);
@@ -56,10 +63,11 @@ public class QualityCheckDAOImpl extends JpaDao<QualityCheck, Long> implements Q
 	        if (pageNum != 0) {
 	            sqlBuilder.append(" offset ").append(pageNum);
 	        }
-			
+	        List<District> districts=districtRepository.findAll();
+	        Long totalSamples= districtId != 0?600l:districts.stream().mapToLong(District::getTotalSamples).sum();
 			final String sqlCountRows = "SELECT FOUND_ROWS()";
 			return this.paginationHelper.fetchPage(this.jdbcTemplate, sqlCountRows, sqlBuilder.toString(),
-	                new Object[] { }, mapper);
+	                new Object[] { }, mapper,0,totalSamples);
 	}
  private final class QualityCheckMapper implements RowMapper<QualityCheckData> {
 

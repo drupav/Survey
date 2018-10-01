@@ -46,7 +46,7 @@ public class UploadDAOImpl extends JpaDao<FileUpload, Long> implements UploadDAO
 			
 			final String sqlCountRows = "SELECT FOUND_ROWS()";
 			return this.paginationHelper.fetchPage(this.jdbcTemplate, sqlCountRows, sqlBuilder.toString(),
-	                new Object[] { }, mapper);
+	                new Object[] { }, mapper,0,0l);
 		}
 	
 	private static final class RespondentMapper implements RowMapper<UploadData> {
