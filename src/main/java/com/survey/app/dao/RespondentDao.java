@@ -16,4 +16,6 @@ Page<InterviewerData> getInterviewerData(Long blockId, Long districtId, String s
 
 Page<InterviewerData> getinterviewierQualitycheckData(Long blockId, Long districtId, String searchString, Long page,
 		Long size);
+
+Page<InterviewerData> getinterviewList(Long page, Long size);
 }

@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.survey.app.dao.RespondentDao;
+import com.survey.app.dto.InterviewerData;
 import com.survey.app.model.Block;
 import com.survey.app.model.District;
 import com.survey.app.model.Interviewer;
@@ -15,6 +17,7 @@ import com.survey.app.repository.BlockRepository;
 import com.survey.app.repository.DistrictRepository;
 import com.survey.app.repository.InterviewerRepository;
 import com.survey.app.repository.RegionRepository;
+import com.survey.app.util.Page;
 
 
 @Service
@@ -31,6 +34,10 @@ public class SurveyCommonServiceImpl implements SurveyCommonService{
 	
 	@Autowired
 	private InterviewerRepository  interviewerRepository;
+	
+	@Autowired
+	private RespondentDao respondentDao;
+	
 
 	@Override
 	public List<District> findAllDistricts() {
@@ -69,6 +76,11 @@ public class SurveyCommonServiceImpl implements SurveyCommonService{
 		  if(interviewerOptional.isPresent())
 			  list.add(interviewerOptional.get());
 		  return list;
+	}
+
+	@Override
+	public Page<InterviewerData> getinterviewList(Long page, Long size) {
+		return respondentDao.getinterviewList(page,size);
 	}
 	
 

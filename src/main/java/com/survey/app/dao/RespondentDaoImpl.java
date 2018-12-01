@@ -251,6 +251,26 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 			return new InterviewerData(id,districtName,blockName,interviewerName,accompaniments,spotChecks,backChecks,audioChecks);
 		}
 	}
+	
+	private static final class InterviewerListDataMapper implements RowMapper<InterviewerData> {
+
+		public String schema() {
+			return "  res.interviewer_code as interviewCode,res.interviewer_name as interviewername,count(res.id) as totalSamples"
+					+ " from respondent res";
+		}
+		
+
+		@Override
+		public InterviewerData mapRow(final ResultSet rs,
+				@SuppressWarnings("unused") final int rowNum)
+				throws SQLException {
+
+			String interviewCode = rs.getString("interviewCode");
+			String interviewerName = rs.getString("interviewername");
+			Long totalSamples = rs.getLong("totalSamples");
+			return new InterviewerData(interviewCode,interviewerName,totalSamples);
+		}
+	}
 	@Override
 	public TreeViewData getMetaData(Long page, Long size, Long blockId, Long districtId) {
 		
@@ -284,13 +304,15 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 	@Override
 	public Page<InterviewerData> getInterviewerData(Long blockId, Long districtId, String searchString, Long page,
 			Long size) {
-		
+		List<District> districts=districtRepository.findAll();
+		Long totalSamples= districtId != 0?600l:districts.stream().mapToLong(District::getTotalSamples).sum();
+		final String sqlCountRows = "SELECT FOUND_ROWS()";
 		InterviewerDataMapper mapper = new InterviewerDataMapper();
 	       final StringBuilder sqlBuilder = new StringBuilder(200);
 	       sqlBuilder.append("select SQL_CALC_FOUND_ROWS ");
 	       sqlBuilder.append(mapper.schema());
 	       if(StringUtils.isNotBlank(searchString)){
-	    	   sqlBuilder.append(" and( res.interviewer_name like '%" + searchString + "%' OR res.interviewer_code like '%" + searchString + "%' ) ");
+	    	   sqlBuilder.append(" and( res.interviewer_name like '%" + searchString + "%' OR res.interviewer_code = " + searchString+ " ) ");
 	       }
 			if(blockId != 0){
 				sqlBuilder.append(" and block.id ="+blockId);
@@ -301,7 +323,9 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 			}
 			
 			sqlBuilder.append(" group by res.block_id,res.interviewer_code");
-			
+			Page<InterviewerData> intrvwpage = this.paginationinterviewerdata.fetchPage(this.jdbcTemplate, sqlCountRows, sqlBuilder.toString(),
+	                new Object[] { }, mapper,0,totalSamples);
+			Long totalInterviews=intrvwpage.getPageItems().stream().mapToLong(i -> i.getCompletedSamples()).sum();
 			if (size != 0) {
 	            sqlBuilder.append(" limit ").append(size);
 	        }
@@ -310,17 +334,17 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 	            sqlBuilder.append(" offset ").append(page);
 	        }
 		//	int completeSampple =  this.jdbcTemplate.queryForObject(sqlCountBuilder.toString(), new Object[] {  }, Integer.class);
-			List<District> districts=districtRepository.findAll();
-			Long totalSamples= districtId != 0?600l:districts.stream().mapToLong(District::getTotalSamples).sum();
+			
 			if(blockId !=0){
 				totalSamples=blockRepository.findById(blockId).get().getTotalSamples();
 			}
-			final String sqlCountRows = "SELECT FOUND_ROWS()";
 			
-			Page<InterviewerData> intrvwpage = this.paginationinterviewerdata.fetchPage(this.jdbcTemplate, sqlCountRows, sqlBuilder.toString(),
+			
+		 intrvwpage = this.paginationinterviewerdata.fetchPage(this.jdbcTemplate, sqlCountRows, sqlBuilder.toString(),
 	                new Object[] { }, mapper,0,totalSamples);
+			
+			intrvwpage.setTotalFilterRecords(totalInterviews);
 			if(StringUtils.isNoneEmpty(searchString)){
-				Long totalInterviews=intrvwpage.getPageItems().stream().mapToLong(i -> i.getCompletedSamples()).sum();
 				intrvwpage.setTotalInterviews(totalInterviews);
 			}
 			return intrvwpage;
@@ -363,6 +387,22 @@ public class RespondentDaoImpl extends JpaDao<Respondent, Long> implements Respo
 		
 	}
 
+	@Override
+	public Page<InterviewerData> getinterviewList(Long page, Long size) {
 
-
+		final String sqlCountRows = "SELECT FOUND_ROWS()";
+		InterviewerListDataMapper mapper = new InterviewerListDataMapper();
+	       final StringBuilder sqlBuilder = new StringBuilder(200);
+	       sqlBuilder.append("select SQL_CALC_FOUND_ROWS ");
+	       sqlBuilder.append(mapper.schema());
+			sqlBuilder.append(" group by res.interviewer_code");
+			if (size != 0) {
+	            sqlBuilder.append(" limit ").append(size);
+	        }
+	        if (page != 0) {
+	            sqlBuilder.append(" offset ").append(page);
+	        }
+	        return this.paginationinterviewerdata.fetchPage(this.jdbcTemplate, sqlCountRows, sqlBuilder.toString(),
+	                new Object[] { }, mapper,0,0l);
+	}
 }

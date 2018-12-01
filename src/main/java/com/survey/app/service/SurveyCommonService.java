@@ -2,10 +2,12 @@ package com.survey.app.service;
 
 import java.util.List;
 
+import com.survey.app.dto.InterviewerData;
 import com.survey.app.model.Block;
 import com.survey.app.model.District;
 import com.survey.app.model.Interviewer;
 import com.survey.app.model.Region;
+import com.survey.app.util.Page;
 
 public interface SurveyCommonService {
 
@@ -23,5 +25,7 @@ public interface SurveyCommonService {
 	
 
 	List<Interviewer> findInterviewerById(Long interviewierId);
+
+	Page<InterviewerData> getinterviewList(Long page, Long size);
 
 }

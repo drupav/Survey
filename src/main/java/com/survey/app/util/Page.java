@@ -9,11 +9,11 @@ import java.util.List;
 
 public class Page<E> {
 
-    private final int totalFilteredRecords;
+    private int totalFilteredRecords;
     private final List<E> pageItems;
-    private final Integer completeSamples;
+    private  Integer completeSamples;
     private final Long totalSamples;
-    private final Long pendingSamples;
+    private  Long pendingSamples;
 	private Long totalInterviews;
 
     public Page(final List<E> pageItems, final Integer totalFilteredRecords, Integer completeSamples, Long totalSamples) {
@@ -52,6 +52,18 @@ public class Page<E> {
 
 	public Long getTotalInterviews() {
 		return totalInterviews;
+	}
+
+	public void setCompletedSamples(Long completeSamples) {
+
+		this.completeSamples =completeSamples != null?completeSamples.intValue():0;
+		this.pendingSamples = totalSamples-completeSamples ;
+				
+	}
+
+	public void setTotalFilterRecords(Long totalInterviews) {
+         this.totalFilteredRecords = totalInterviews !=0 ?totalInterviews.intValue():this.totalFilteredRecords;
+         this.pendingSamples = this.totalSamples-Long.valueOf(totalFilteredRecords) ;
 	}
     
     

@@ -1,10 +1,6 @@
 package com.survey.app.controller;
 
-import java.net.URI;
-import java.util.Collections;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,19 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.suervey.app.util.AppConstants;
 import com.survey.app.dto.UserData;
-import com.survey.app.exception.AppException;
 import com.survey.app.exception.ResourceNotFoundException;
-import com.survey.app.model.Role;
-import com.survey.app.model.RoleName;
 import com.survey.app.model.User;
 import com.survey.app.payload.ApiResponse;
 import com.survey.app.payload.PagedResponse;
 import com.survey.app.payload.PollResponse;
-import com.survey.app.payload.SignUpRequest;
 import com.survey.app.payload.UserIdentityAvailability;
 import com.survey.app.payload.UserProfile;
 import com.survey.app.payload.UserSummary;

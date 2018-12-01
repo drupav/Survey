@@ -35,6 +35,12 @@ public class InterviewerData {
 		this.audioChecks = audioChecks;
 	}
 
+	public InterviewerData(String interviewCode, String interviewerName, Long totalSamples) {
+		this.interviewerCode = interviewCode;
+		this.interviewerName = interviewerName;
+		this.completedSamples  = totalSamples;
+	}
+
 	public Long getId() {
 		return id;
 	}

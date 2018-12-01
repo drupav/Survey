@@ -30,7 +30,7 @@ import com.survey.app.util.FileStorageProperties;
 import com.survey.app.util.FileUtils;
 import com.survey.app.util.Page;
 
-@Service
+@Service("kiran")
 public class RespondentServiceImp implements RespondentService{
 	
 	private  Path fileStorageLocation;
